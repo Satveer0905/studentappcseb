@@ -1,5 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.css';
+import styles from './Registration.module.css';
+
 function Registration() {
     async function sendData(e){
      e.preventDefault();
@@ -21,7 +23,7 @@ const response=await fetch("https://studentappcseb-m2xs.onrender.com//register",
 
 
 
-    <div><h2 style={{backgroundColor:'#03f4fc'}}>Registration</h2>
+    <div><h2 className={styles.registrationHeader}>Registration</h2>
         <div>
         <form onSubmit={sendData}>
         <div class="form-group">

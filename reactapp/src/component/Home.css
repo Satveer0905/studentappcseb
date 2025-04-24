@@ -1,0 +1,30 @@
+.home-header {
+  background-color: magenta;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 20px;
+}
+
+.home-nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.home-nav ul li a {
+  text-decoration: none;
+  color: #4a148c;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.home-nav ul li a:hover {
+  color: #7e57c2;
+}

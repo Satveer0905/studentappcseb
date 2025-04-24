@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from './StudentAdmin.module.css';
 
 function StudentAdmin() {
   const [studentData, setStudentData] = useState([]);
@@ -43,61 +44,37 @@ function StudentAdmin() {
 
   return (
     <div>
-      <div
-        style={{
-          backgroundColor: "brown",
-          color: "white",
-          fontSize: "28px",
-          fontWeight: "700",
-          fontFamily: "Verdana",
-          marginBottom: "20px",
-          padding: "10px",
-        }}
-      >
+      <div className={styles.studentAdminHeader}>
         Student Admin
       </div>
       <form onSubmit={showData}>
         <div>
           <input type="text" name="sid" placeholder="Enter Student ID" />
         </div>
-        <div style={{ marginTop: "5px" }}>
+        <div className={styles.studentAdminFormInput}>
           <button>Search</button>
         </div>
       </form>
       <div>
         {studentData && studentData.length > 0 ? (
-          <table
-            style={{
-              border: "1px solid black",
-              borderCollapse: "collapse",
-              width: "100%",
-            }}
-          >
+          <table className={styles.studentAdminTable}>
             <thead>
               <tr>
-                <th style={{ border: "1px solid black", padding: "8px" }}>
-                  Name
-                </th>
-                <th style={{ border: "1px solid black", padding: "8px" }}>
-                  Email
-                </th>
+                <th className={styles.studentAdminTable}>Name</th>
+                <th className={styles.studentAdminTable}>Email</th>
               </tr>
             </thead>
             <tbody>
               {studentData.map((student, index) => (
                 <tr key={index}>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
-                    {student.name}
-                  </td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
-                    {student.email}
-                  </td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                  <td className={styles.studentAdminTable}>{student.name}</td>
+                  <td className={styles.studentAdminTable}>{student.email}</td>
+                  <td className={styles.studentAdminTable}>
                     <button onClick={() => deleteStudent(student.email)}>
                       Delete
                     </button>
                   </td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                  <td className={styles.studentAdminTable}>
                     <button onClick={() => updateStudent(student.email)}>Update</button>
                   </td>
                 </tr>

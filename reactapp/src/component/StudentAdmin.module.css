@@ -1,0 +1,25 @@
+.studentAdminHeader {
+  background-color: brown;
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.studentAdminFormInput {
+  margin-top: 5px;
+}
+
+.studentAdminTable {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.studentAdminTable th,
+.studentAdminTable td {
+  border: 1px solid black;
+  padding: 8px;
+}

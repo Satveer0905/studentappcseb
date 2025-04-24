@@ -1,8 +1,11 @@
 import React from 'react'
+import styles from './Dashboard.module.css';
 
 function Dashboard() {
   return (
-    <div><h2 style={{backgroundColor:'#d07ae6',color:'white',fontSize:'20px'}}>Dashboard</h2>   </div>
+    <div>
+      <h2 className={styles.dashboardHeader}>Dashboard</h2>
+    </div>
   )
 }
 

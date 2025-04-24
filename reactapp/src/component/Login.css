@@ -1,0 +1,46 @@
+.login-header {
+  background-color: #03f4fc;
+  color: #003a46;
+  font-size: 26px;
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: 8px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-form .form-group {
+  margin-bottom: 15px;
+}
+
+.login-form label {
+  font-weight: 600;
+  color: #004d61;
+}
+
+.login-form input.form-control {
+  border-radius: 6px;
+  border: 1px solid #007bff;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+.login-form button.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button.btn-primary:hover {
+  background-color: #0056b3;
+}

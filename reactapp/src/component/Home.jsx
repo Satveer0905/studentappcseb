@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import './Home.css';
 
 function Home() {
   return (
     <div>
-      <div><h2 style={{backgroundColor:'magenta'}}>Welcome to Student Page</h2></div>
-      <nav>
+      <div><h2 className="home-header">Welcome to Student Page</h2></div>
+      <nav className="home-nav">
         <ul>
           <li>
             <Link to="/login">Login</Link>
