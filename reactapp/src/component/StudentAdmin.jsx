@@ -8,13 +8,15 @@ function StudentAdmin() {
     const sid = e.target.sid.value;
 
     if (sid == "*") {
-      const response = await fetch("http://localhost:3008/admin/show");
+      // const response = await fetch("http://localhost:3008/admin/show");
+      const response = await fetch("https://studentappcseb-m2xs.onrender.com/admin/show");
       const res = await response.json();
       console.log(res.msg);
       setStudentData(res.msg);
     } else {
       const response = await fetch(
-       ` http://localhost:3008/admin/showByEmailid/${sid}`
+      //  ` http://localhost:3008/admin/showByEmailid/${sid}`
+        `https://studentappcseb-m2xs.onrender.com/admin/showByEmailid/${sid}`,
       );
       const res = await response.json();
       console.log(res.msg);
@@ -26,7 +28,8 @@ function StudentAdmin() {
     console.log(email);
     
     const response = await fetch(
-      `http://localhost:3008/admin/deleteByEmailid/${email}`,
+      // `http://localhost:3008/admin/deleteByEmailid/${email}`,
+      `https://studentappcseb-m2xs.onrender.com/admin/deleteByEmailid/${email}`,
       { method: "DELETE" }
     );
     const res = await response.json();
