@@ -1,389 +1,130 @@
-
-const http=require('http');
+const express=require('express');
+const cors=require('cors');
 const fs=require('fs').promises;
-const PORT=3005
-const server=http.createServer((req,res)=>{
+const app=express();
+const port=3008;
+app.use(express.json());
+app.use(cors()); //allow cross origin
+app.get("/",(req,res)=>{
+res.send("Welcome to Express Framework Server");
+})
 
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.setHeader('Access-Control-Allow-method','GET,POST,DELETE,PUT,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers','Content-Type');
+app.post("/msg",(req,res)=>{
+    res.send("Hii, Hitting the /msg api");
+})
 
-    if(req.method=="OPTIONS"){
-        res.statusCode=200;
-        return res.end();
-    }
-
-
-    if(req.url=="/register" && req.method=="POST"){
-        try{
-        let body='';
-        let arr=[];
-
-        req.on('data',chunk=>{
-            body+=chunk;
-        })
-
-        req.on('end',async()=>{
-          const {name,email,password}=JSON.parse(body);
-          console.log("Name="+name);
-                const data1=await fs.readFile('student.json',{encoding:'utf-8'});
+app.post("/register",async(req,res)=>{
+    let arr=[];
+const {name,email,password}=req.body;
+const data1=await fs.readFile('student.json',{encoding:'utf-8'});
                 arr=JSON.parse(data1);
-                console.log("data from file:")
-                console.log(arr);
+
                 const result=arr.find(ele=>ele.email==email);
                console.log(result);
                if(result){
                 console.log("Inside statue true");
-                res.setHeader('Content-Type','application/json');
-                return res.end(JSON.stringify({msg:"Email is already registerd"}))
+                
+                return res.json({msg:"Email is already registerd"})
                }
          else{
                arr.push({name,email,password});
                console.log(arr);
-           fs.writeFile('student.json',JSON.stringify(arr,null,2));
-           res.end(JSON.stringify({msg:"User successfully register"}));
+           await fs.writeFile('student.json',JSON.stringify(arr,null,2));
+           res.json({msg:"Registration done successfully!!!"});
          }
-           
-        })
-    }catch(err){
-        res.end(JSON.stringify({msg:"Error is:"+err}));
-    }
-    }
 
-    if(req.url=="/login" && req.method=="POST"){
-        try{
-        let body='';
-        let arr=[];
+})
 
-        req.on('data',chunk=>{
-            body+=chunk;
-        })
-        req.on('end',async()=>{
-       console.log(body);
-       const {email,password}=JSON.parse(body);
-       const data1=await fs.readFile('student.json',{encoding:'utf-8'});
+
+app.post("/login",async(req,res)=>{
+let arr=[];
+    const {email,password}=req.body;
+    console.log(email+password);
+    const data1=await fs.readFile('student.json',{encoding:'utf-8'});
        arr=JSON.parse(data1);
        const result=arr.find(ele=>ele.email==email && ele.password==password);
        if(result){
-        res.setHeader('Content-Type','application/json');
-        res.end(JSON.stringify({msg:"success"}));
+        
+        res.json({msg:"success"});
        }
        else{
-        res.setHeader('Content-Type','application/json');
-       res.end(JSON.stringify({msg:"User is invalid"}));
-       }
-        })
-    }catch(err){
-        res.end(JSON.stringify({msg:"Error is:"+err}));
-    }
-    }
-
-   
-})
-
-server.listen(PORT,()=>{
-    console.log("Serve is running on::"+PORT);
-    
-})
-
-
-
-
-// const http = require('http');
-// const fs = require('fs').promises;
-// const PORT = 3005;
-
-// const server = http.createServer(async (req, res) => {
-
-
-//     if (req.url === "/register" && req.method === "POST") {
-//         try {
-//             let body = '';
-
-//             req.on('data', chunk => {
-//                 body += chunk;
-//             });
-
-//             req.on('end', async () => {
-//                 const { name, email, password } = JSON.parse(body);
-//                 console.log("Name=" + name);
-
-//                 let arr = [];
-//                 try {
-                    
-//                     const data1 = await fs.readFile('student.json', { encoding: 'utf-8' });
-//                     arr = JSON.parse(data1); 
-//                 } catch (err) {
-                    
-//                     console.log("Error reading student.json, initializing empty array.");
-//                     arr = [];
-//                 }
-
-              
-//                 const result = arr.find(ele => ele.email === email);
-
-//                 if (result) {
-//                     console.log("Email is already registered");
-//                     res.setHeader('Content-Type', 'application/json');
-//                     return res.end(JSON.stringify({ msg: "Email is already registered" }));
-//                 } else {
-                    
-//                     arr.push({ name, email, password });
-
-//                     console.log(arr); 
-//                     try {
-                        
-//                         await fs.writeFile('student.json', JSON.stringify(arr, null, 2));
-//                     } catch (err) {
-//                         console.error("Error writing to file:", err);
-//                         res.writeHead(500, { 'Content-Type': 'application/json' });
-//                         return res.end(JSON.stringify({ msg: "Error writing to student.json" }));
-//                     }
-
-//                     res.setHeader('Content-Type', 'application/json');
-//                     return res.end(JSON.stringify({ msg: "User successfully registered" }));
-//                 }
-//             });
-//         } catch (err) {
-//             console.error("Error:", err);
-//             res.writeHead(500, { 'Content-Type': 'application/json' });
-//             res.end(JSON.stringify({ msg: "Internal server error" }));
-//         }
-//     }
-
-//     if (req.url === "/login" && req.method === "POST") {
-//         try {
-//             let body = '';
-
-//             req.on('data', chunk => {
-//                 body += chunk;
-//             });
-
-//             req.on('end', async () => {
-//                 console.log("Received Data:", body);
-//                 const { email, password } = JSON.parse(body);
-
-//                 let arr = [];
-//                 try {
-//                     const data1 = await fs.readFile('student.json', { encoding: 'utf-8' });
-//                     arr = JSON.parse(data1); 
-//                 } catch (err) {
-//                     console.log("Error reading student.json, initializing empty array.");
-//                     arr = []; 
-//                 }
-
-               
-//                 const result = arr.find(ele => ele.email === email && ele.password === password);
-
-//                 res.setHeader('Content-Type', 'application/json');
-//                 if (result) {
-//                     return res.end(JSON.stringify({ msg: "User successfully logged in" }));
-//                 } else {
-//                     return res.end(JSON.stringify({ msg: "Invalid email or password" }));
-//                 }
-//             });
-//         } catch (err) {
-//             console.error("Error:", err);
-//             res.writeHead(500, { 'Content-Type': 'application/json' });
-//             res.end(JSON.stringify({ msg: "Internal server error" }));
-//         }
-//     }
-// });
-
-// server.listen(PORT, () => {
-//     console.log("Server is running on port::" + PORT);
-// });
-
-
-
-
-
-
-
-
-// // // const http = require('http');
-// // // const fs = require('fs').promises;
-// // // const PORT = 3005;
-
-// // // // Creating the server
-// // // const server = http.createServer(async (req, res) => {
-// // //     if (req.url == "/register" && req.method == "POST") {
-// // //         let body = '';
         
-// // //         req.on('data', chunk => {
-// // //             body += chunk;
-// // //         });
+        res.json({msg:"user is invalid, email or password is incorrect"});
+       }
 
-// // //         req.on('end', async() => {
-// // //             const {name,email,password}=JSON.parse(body);
-// // //             let arr=[];
-// // //             // console.log("Name"+name);
-            
-// // //                 const data1=await fs.readFile('student.json',{encoding:'utf-8'})
-// // //                 arr=JSON.parse(data1);
-// // //                 const status =arr.find(ele => ele.email == email);
-// // //                 if (status){
-// // //                     res.end(JSON.stringify({msg:"Email is already registered"}))
-// // //                 }
-// // //                 else{
-// // //                     arr.push({name,email,password});
-                   
-// // //                 }
-// // //             //console.log("Received Data:", body);
-// // //         });
-// // //     } else {
-// // //         res.end("404 Not Found");
-// // //     }
-// // // });
 
-// // // // Start the server
-// // // server.listen(PORT, () => {
-// // //     console.log(`Server is running on port ${PORT}`);
-// // // });
-
-// // // const http=require('http');
-// // // const fs=require('fs').promises;
-// // // const PORT=3005
-// // // const server=http.createServer((req,res)=>{
-// // //     if(req.url=="/register" && req.method=="POST"){
-// // //         let body='';
-// // //         let arr=[];
-
-// // //         req.on('data',chunk=>{
-// // //             body+=chunk;
-// // //         })
-// // //         req.on('end',async()=>{
-// // //           const {name,email,password}=JSON.parse(body);
-// // //           console.log("Name="+name);
-// // //                 const data1=await fs.readFile('student.json',{encoding:'utf-8'});
-// // //                 arr=JSON.parse(data1);
-// // //                 console.log("data from file:")
-// // //                 console.log(arr);
-// // //                 const result=arr.find(ele=>ele.email==email);
-// // //                console.log(result);
-// // //                if(result){
-// // //                 console.log("Inside statue true");
-// // //                 res.setHeader('Content-Type','application/json');
-// // //                 return res.end(JSON.stringify({msg:"Email is already registerd"}))
-// // //                }
-// // //          else{
-// // //                arr.push({name,email,password});
-// // //                console.log(arr);
-// // //            fs.writeFile('student.json',JSON.stringify(arr,null,2 ));
-// // //            res.end(JSON.stringify({msg:"User successfully register"}));
-// // //          }
-// // //             //console.log(body);
-// // //         })
-// // //     }
-
-// // //     if(req.url=="/register" && req.method=="POST"){
-// // //         let body='';
-// // //         let arr=[];
-// // //         req.on('data',chunk=>{
-// // //             body+=chunk;
-// // //             })
-// // //             req.on('end',()=>{
-// // //                 console.log(body);
-// // //                 res.end(JSON.stringify({msg:"Reaching at the end point"}));
-// // //             })
-
-// // //     }
-
-// // // })
-// // // server.listen(PORT,()=>{
-// // //     console.log("Serve is running on::"+PORT);
+})
+app.get("/admin/show",async(req,res)=>{
+    try{
+const data=await fs.readFile('student.json',{encoding:'utf-8'});
+      const sdata= JSON.parse(data);
+      res.json({msg:sdata})
+    }catch(err){
+        res.json({msg:err.message})
+    }
+})
+app.get("/admin/showByEmailid/:email",async (req,res)=>{
+    try{
+    let arr=[]
+    // res.json({msg:"show by email id"})
+    const emailid=req.params.email;
+    console.log(emailid);
+    const data=await fs.readFile('student.json',{encoding:'utf-8'});
+    console.log(data);
     
-// // // })
+    arr=JSON.parse(data);
+    const result=arr.find(ele=>ele.email==emailid);
+    if(result){
+        res.json({msg:result})
+        }
+        else{
+            res.json({msg:"user is invalid, email is incorrect"})
+            }
+    }catch(err){
+        res.status(500).json({msg:err.message})
+    }
+    // res.json({msg:result});
+})
+app.delete("/admin/deleteByEmailid/:email",async(req,res)=>{
+    try{
+        const emailid =req.params.email;
+        console.log(emailid);
+        let arr=[]; 
+        const data=await fs.readFile('student.json',{encoding:'utf-8'});
+        arr=JSON.parse(data);
+        const index=arr.findIndex(ele=>ele.email==emailid);
+        if(index==-1){  
+            return res.json({msg:"email id is not found in datatbase"})
+        }
+        arr.splice(index,1);
+        await fs.writeFile('student.json',JSON.stringify(arr,null,2));
+        res.json({msg:"user is deleted successfully"})
+        }catch(err){
+            res.json({msg:err.message})
+            }
 
+})
 
+app.patch("/admin/updateByEmailid/:email", async (req, res) => {
+    try {
+        const emailid = req.params.email;
+        const { name, email, password } = req.body;
+        let arr = [];
+        const data = await fs.readFile('student.json', { encoding: 'utf-8' });
+        arr = JSON.parse(data);
+        const index = arr.findIndex(ele => ele.email === emailid);
+        if (index === -1) {
+            return res.json({ msg: "email id is not found in database" });
+        }
+        // Update user details
+        arr[index] = { name, email, password };
+        await fs.writeFile('student.json', JSON.stringify(arr, null, 2));
+        res.json({ msg: "user updated successfully" });
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
+    }
+});
 
-
-// // const http = require('http');
-// // const fs = require('fs').promises;
-// // const PORT = 3005;
-
-// // const server = http.createServer(async (req, res) => {
-// //     if (req.url === "/register" && req.method === "POST") {
-// //         try {
-// //             let body = '';
-
-// //             req.on('data', chunk => {
-// //                 body += chunk;
-// //             });
-
-// //             req.on('end', async () => {
-// //                 const { name, email, password } = JSON.parse(body);
-// //                 console.log("Name=" + name);
-
-// //                 let arr = [];
-// //                 try {
-// //                     const data1 = await fs.readFile('student.json', { encoding: 'utf-8' });
-// //                     arr = JSON.parse(data1);
-// //                 } catch (err) {
-// //                     console.log("Error reading student.json, initializing empty array.");
-// //                     arr = [];
-// //                 }
-
-// //                 console.log("Data from file:", arr);
-// //                 const result = arr.find(ele => ele.email === email);
-
-// //                 if (result) {
-// //                     console.log("Inside status true");
-// //                     res.setHeader('Content-Type', 'application/json');
-// //                     return res.end(JSON.stringify({ msg: "Email is already registered" }));
-// //                 } else {
-// //                     arr.push({ name, email, password });
-// //                     console.log(arr);
-// //                     await fs.writeFile('student.json', JSON.stringify(arr, null, 2));
-// //                     res.setHeader('Content-Type', 'application/json');
-// //                     return res.end(JSON.stringify({ msg: "User successfully registered" }));
-// //                 }
-// //             });
-// //         } catch (err) {
-// //             console.error("Error:", err);
-// //             res.writeHead(500, { 'Content-Type': 'application/json' });
-// //             res.end(JSON.stringify({ msg: "Internal server error" }));
-// //         }
-// //     }
-
-// //     if (req.url === "/login" && req.method === "POST") {
-// //         try {
-// //             let body = '';
-
-// //             req.on('data', chunk => {
-// //                 body += chunk;
-// //             });
-
-// //             req.on('end', async () => {
-// //                 console.log("Received Data:", body);
-// //                 const { email, password } = JSON.parse(body);
-
-// //                 let arr = [];
-// //                 try {
-// //                     const data1 = await fs.readFile('student.json', { encoding: 'utf-8' });
-// //                     arr = JSON.parse(data1);
-// //                 } catch (err) {
-// //                     console.log("Error reading student.json, initializing empty array.");
-// //                     arr = [];
-// //                 }
-
-// //                 const result = arr.find(ele => ele.email === email && ele.password === password);
-
-// //                 res.setHeader('Content-Type', 'application/json');
-// //                 if (result) {
-// //                     return res.end(JSON.stringify({ msg: "User successfully logged in" }));
-// //                 } else {
-// //                     return res.end(JSON.stringify({ msg: "Invalid email or password" }));
-// //                 }
-// //             });
-// //         } catch (err) {
-// //             console.error("Error:", err);
-// //             res.writeHead(500, { 'Content-Type': 'application/json' });
-// //             res.end(JSON.stringify({ msg: "Internal server error" }));
-// //         }
-// //     }
-// // });
-
-// // server.listen(PORT, () => {
-// //     console.log("Server is running on port::" + PORT);
-// // });
+app.listen(port,()=>{
+    console.log("Express srver is running on::"+port)
+})
