@@ -11,7 +11,7 @@ function Registration() {
      //alert(name+email+password);
 
         // const response=await fetch("http://localhost:3008/register",{
-const response=await fetch("https://studentappcseb-m2xs.onrender.com//register",{
+const response=await fetch("https://studentappcseb-m2xs.onrender.com/register",{
             method:"POST",
             body:JSON.stringify({name,email,password}),
             headers:{'Content-Type':'application/json'}
