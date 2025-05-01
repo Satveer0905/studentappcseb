@@ -9,6 +9,11 @@ function Home() {
       <nav className="home-nav">
         <ul>
           <li>
+            <Link to="/studentadmin"></Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
             <Link to="/login">Login</Link>
           </li>
           <li>
